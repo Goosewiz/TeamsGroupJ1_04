@@ -4,6 +4,9 @@ public class ResultTable {
     private int[][] gasSupplyInfo = new int[6][4];
     private double[][] priceInfo = new double[6][2];
     private String[][] allInfo = new String[7][7];
+    public String[][] getAllInfo(){
+        return allInfo;
+    }
 
     ResultTable() {
         for (int i = 0; i < gasSupplyInfo.length; i++) {

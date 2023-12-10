@@ -18,7 +18,6 @@ class GasolineSuppliesTest {
         for (int i = 0; i < 4; i++) {
             answer = answer + gs.solveProblem(rs);
         }
-        rs.printTable();
-        System.out.println("Общая цена: " + answer);
+        assertEquals(13572.0, answer, "allSum");
     }
 }
