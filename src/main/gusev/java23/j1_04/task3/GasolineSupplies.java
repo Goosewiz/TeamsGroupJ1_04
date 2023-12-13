@@ -1,6 +1,7 @@
 package gusev.java23.j1_04.task3;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class GasolineSupplies {
     private final int[] MAX_AMOUNT = {600, 420, 360, 250, 700, 390};
@@ -30,7 +31,6 @@ public class GasolineSupplies {
         this.gasStationNeeds[2] = amountC;
         this.gasStationNeeds[3] = amountD;
     }
-
     public int findNumberOfSupplier() {
         double[] temp = PRICE_PER_UNIT.clone();
         Arrays.sort(temp);
@@ -85,6 +85,50 @@ public class GasolineSupplies {
             gasStationNeeds[numberOfGasStation] = gasStationNeeds[numberOfGasStation] - maxAmount[numberOfSupplier];
             maxAmount[numberOfSupplier] = 0;
             priceWithShipment = priceWithShipment + solveProblem(rs);
+        }
+        return priceWithShipment;
+    }
+    public int findNumberOfGasStationBetter() {
+        int[] temp = gasStationNeeds.clone();
+        Arrays.sort(temp);
+        for (int i = temp.length - 1; i>-1; i-- ){
+            for (int j = 0; j<gasStationNeeds.length; j++)
+                if (temp[i]==gasStationNeeds[j] && gasStationNeeds[j] > 0)
+                    return j;
+        }
+        return -1;
+    }
+    public int findNumberOfSupplierBetter(int numberOfGasStation) {
+        double[] temp = PRICE_PER_UNIT.clone();
+        Arrays.sort(temp);
+        for (int i = 0; i < temp.length; i++) {
+            for (int j = 0; j < PRICE_PER_UNIT.length; j++) {
+                if (temp[i] == PRICE_PER_UNIT[j] && maxAmount[j] > 0) {
+                    if (gasStationNeeds[numberOfGasStation] < maxAmount[j])
+                        return j;
+                }
+            }
+        }
+        return -1;
+    }
+    public double solveProblemBetter(ResultTable rs) {
+        double price = 0;
+        double priceWithShipment = 0;
+        int numberOfGasStation = findNumberOfGasStationBetter();
+        if (numberOfGasStation == -1)
+            return Double.NaN;
+        int numberOfSupplier = findNumberOfSupplierBetter(numberOfGasStation);
+        if (numberOfSupplier == -1)
+            return Double.NaN;
+        if (gasStationNeeds[numberOfGasStation] < maxAmount[numberOfSupplier]) {
+            price = price + gasStationNeeds[numberOfGasStation] * PRICE_PER_UNIT[numberOfSupplier];
+            rs.addCostGasSupplyCell(numberOfSupplier, numberOfGasStation, gasStationNeeds[numberOfGasStation]);
+            //System.out.println(price + " цена без поставки " + (numberOfSupplier + 1) + " - номер поставщика " + (numberOfGasStation + 1) + " - номер АЗС");
+            priceWithShipment = price + ALL_COST[numberOfSupplier][numberOfGasStation];
+            rs.addCostPriceCell(numberOfSupplier, price, priceWithShipment);
+            //System.out.println(price + " цена с поставкой " + (numberOfSupplier + 1) + " - номер поставщика " + (numberOfGasStation + 1) + " - номер АЗС");
+            maxAmount[numberOfSupplier] = maxAmount[numberOfSupplier] - gasStationNeeds[numberOfGasStation];
+            gasStationNeeds[numberOfGasStation] = 0;
         }
         return priceWithShipment;
     }

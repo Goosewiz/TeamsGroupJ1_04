@@ -18,6 +18,14 @@ class GasolineSuppliesTest {
         for (int i = 0; i < 4; i++) {
             answer = answer + gs.solveProblem(rs);
         }
-        assertEquals(13572.0, answer, "allSum");
+        assertEquals(13572.0, answer);
+        gs = new GasolineSupplies(amountA, amountB, amountC, amountD);
+        rs = new ResultTable();
+        double betterAnswer = 0;
+        for (int i = 0; i < 4; i++) {
+            betterAnswer = betterAnswer + gs.solveProblemBetter(rs);
+        }
+        assertEquals(12326.0, betterAnswer);
+        assertTrue(answer > betterAnswer);
     }
 }
