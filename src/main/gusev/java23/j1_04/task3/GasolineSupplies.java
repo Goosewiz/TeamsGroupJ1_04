@@ -114,10 +114,14 @@ public class GasolineSupplies {
     public double solveProblemBetter(ResultTable rs) {
         double price = 0;
         double priceWithShipment = 0;
+        int numberOfSupplier;
         int numberOfGasStation = findNumberOfGasStationBetter();
-        if (numberOfGasStation == -1)
-            return Double.NaN;
-        int numberOfSupplier = findNumberOfSupplierBetter(numberOfGasStation);
+        if (numberOfGasStation == -1){
+            numberOfSupplier = findNumberOfSupplier();
+            numberOfGasStation = findNumberOfGasStation(numberOfSupplier);
+        } else{
+            numberOfSupplier = findNumberOfSupplierBetter(numberOfGasStation);
+        }
         if (numberOfSupplier == -1)
             return Double.NaN;
         if (gasStationNeeds[numberOfGasStation] < maxAmount[numberOfSupplier]) {
